@@ -8,7 +8,7 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     icon: join(__dirname, "icon.png"),   
     autoHideMenuBar: true,
-    minWidth: 800,
+    minWidth: 900,
     minHeight: 500,
     maxHeight: 500,
     maxWidth: 800,
