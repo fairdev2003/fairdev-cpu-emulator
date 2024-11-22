@@ -12,7 +12,6 @@ export const ConsoleLine = ({ content }: { content: string }) => {
 };
 export const SiemaCommand = () => {
   return (
-    
     <div>
       <p>---------------------------------------</p>
       <p className="text-blue-400">Siema Byku!</p>
@@ -22,19 +21,24 @@ export const SiemaCommand = () => {
 };
 
 export const HelpCommand = () => {
+  const helpOutput = `help - Display this help message
+cls - Clear the console
+load <file> - Load a file into memory
+run <file> - Run the loaded file
+               `;
   return (
     <div>
-      <h2>Help</h2>
-      <p>
-        This is a simple CPU emulator. Supported commands:
-        <ul>
-          <li>ADD [destination register] [source register]</li>
-          <li>SUB [destination register] [source register]</li>
-          <li>MUL [destination register] [source register]</li>
-          <li>CLS</li>
-          <li>HELP</li>
-        </ul>
-      </p>
+      <h1>{` `}</h1>
+      <p className="text-blue-400">Available commands:</p>
+      <p>{` `}</p>
+      <h1>Basic commmands</h1>
+      <p><span className="font-bold">{"    "}help</span>      Display this help message</p>
+      <p><span className="font-bold">{"    "}cls</span>       Clear the console</p>
+      <p>{` `}</p>
+      <h1>CPU Emulator commmands</h1>
+      <p><span className="font-bold">{"    "}mov</span>       mov assembly instruction</p>
+      <p><span className="font-bold">{"    "}xchg</span>      xhgr assembly instruction</p>
+      {` `}
     </div>
   );
 };

@@ -2,11 +2,13 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Console, CPU } from "./emulator";
-import { ConsoleLine, SiemaCommand } from "./terminal/terminal";
+import { ConsoleLine, HelpCommand, SiemaCommand } from "./terminal/terminal";
 
 export default function Home() {
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
-  const [consoleElements, setConsoleElements] = useState<any>([<p>Type "help" to view available commands</p>]);
+  const [consoleElements, setConsoleElements] = useState<any>([
+    <p>Type "help" to view available commands</p>,
+  ]);
   const [commandContent, setCommandContent] = useState("");
   const cpu = new CPU();
   const terminal = new Console();
@@ -29,7 +31,10 @@ Siema byku! :D
 ------------------------------------------------------`;
 
   return (
-    <div ref={divRef} className="flex flex-col whitespace-pre-wrap text-white p-2">
+    <div
+      ref={divRef}
+      className="flex flex-col whitespace-pre-wrap text-white p-2"
+    >
       {consoleElements.map((element, index) => (
         <div key={index} className="text-gray-400">
           {element}
@@ -60,8 +65,8 @@ Siema byku! :D
               if (commandContent.startsWith("help")) {
                 setConsoleElements([
                   ...consoleElements,
-                  <ConsoleLine content={commandContent}/>,
-                  helpOutput,
+                  <ConsoleLine content={commandContent} />,
+                  <HelpCommand />,
                 ]);
                 console.log(consoleElements);
               }
@@ -72,8 +77,38 @@ Siema byku! :D
               if (commandContent.startsWith("siema")) {
                 setConsoleElements([
                   ...consoleElements,
-                  <ConsoleLine content={commandContent}/>,
-                  <SiemaCommand/>,
+                  <ConsoleLine content={commandContent} />,
+                  <SiemaCommand />,
+                ]);
+              }
+              if (commandContent.startsWith("mov")) {
+                const args = commandContent.split(" ");
+                const [command, firstArg, secondArg] = args;
+
+
+                var message = <div></div>;
+                if (args.length > 1) {
+                  message = (
+                    <div>
+                      <p><span className="text-blue-500">Command:</span> {command.toUpperCase()}</p>
+                      <p><span className="text-blue-500">First Argument:</span> {firstArg}</p>
+                      <p><span className="text-blue-500">Second Argument:</span> {secondArg}</p>
+                    </div>
+                  );
+                } else {
+                  message = (
+                    <div>
+                      <p>---------------------------------------</p>
+                      <p className="text-red-500"><span className="text-white">{"["}</span>⚠︎<span className="text-white">{"]"}</span> Missing args: {"<arg1>"} and {"<arg2>"}</p>
+                      <p>---------------------------------------</p>
+                    </div>
+                  );
+                }
+
+                setConsoleElements([
+                  ...consoleElements,
+                  <ConsoleLine content={commandContent} />,
+                  message,
                 ]);
               }
               setCommandContent("");
