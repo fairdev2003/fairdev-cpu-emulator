@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import {RegistersData, RegistriesType, ReturnType} from "@/app/types";
 
 type ConsoleLineProps = {
   content: string;
@@ -39,38 +40,63 @@ export const SiemaCommand = () => {
 
 export const HelpCommand = () => {
   return (
-      <div>
+    <div>
       <h1>{` `}</h1>
       <p className="text-blue-400">Available commands:</p>
       <p>{` `}</p>
       <h1>Basic commmands</h1>
       <p>
-        <span className="font-bold">{"    "}help</span>       Display this help message
+        <span className="font-bold">{"    "}help</span> {"       "}Display this help message
       </p>
       <p>
-        <span className="font-bold">{"    "}cls</span>        Clear the console
+        <span className="font-bold">{"    "}cls</span> {"       "}Clear the console
       </p>
+
+      <p>
+        <span className="font-bold">{"    "}cls</span> {"       "}Clear the console
+      </p>
+
+
       <p>{` `}</p>
       <h1>CPU Emulator commmands</h1>
       <p>
-        <span className="font-bold">{"    "}mov</span>        mov assembly instruction
+        <span className="font-bold">{"    "}mov {"<dest> <src>"}</span> {"       "}mov assembly instruction
       </p>
       <p>
-        <span className="font-bold">{"    "}xchg</span>       xhgr assembly
+        <span className="font-bold">{"    "}xchg</span> {"       "}xhgr assembly
         instruction
+      </p>
+      <p>
+        <span className="font-bold">{"    "}reset</span> {"       "}clear the memory
+      </p>
+      <p>
+        <span className="font-bold">{"    "}dump</span> {"       "}print the memory
       </p>
       {` `}
     </div>
   );
 };
 
-export const UnknownCommand = ({ content }: { content: string }) => {
+export const UnknownCommand = ({content}: { content: string }) => {
   return <div>Unknown Command: {content.toLowerCase().split(" ")[0]}</div>;
 };
+
 export const ErrorCommand = ({ content }: { content: string }) => {
   return <div>
     <p className='text-red-500'>
-      {content}
+      ⛔ {content}
     </p>
   </div>;
 };
+
+export const OutputMov = ({ content }: { content: typeof RegistersData}) => {
+  return (
+    <div className=''>
+      {content.AX}
+    </div>
+  )
+}
+
+export const Space = () => {
+  return <div>{` `}</div>;
+}

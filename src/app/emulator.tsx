@@ -1,4 +1,4 @@
-import type {DumpType} from "@/app/types";
+import type {ReturnType} from "@/app/types";
 
 class CPU {
   
@@ -16,60 +16,65 @@ class CPU {
   };
   public stack: number[] = [1, 2];
   
-  public dump(args: string[]): DumpType  {
+  public dump(args: string[])  {
     switch (args[1]) {
       case "stack":
         return {
           message: JSON.stringify(this.stack),
           isError: false
         };
-      case "registries":
+      case "r":
         if (args.length > 2 && args[2].includes("--")) {
-          const registry = args[2].replace("--", "")
+          const registry = args[2].replace("--", "").toLowerCase()
           return {
-            message: this.registers[registry].toString(),
+            message: (
+              <div>
+                {` `}
+                <p><span className='text-green-400'>{registry.toUpperCase()}:</span> {this.registers[registry].toString()}</p>
+                {` `}
+              </div>
+              
+            ),
             isError: false
-          };  
+          };
         }
+        const reg = this.registers;
         return {
-          message: JSON.stringify(this.registers),
-          isError: false
+          message: (<div>
+            {` `}
+            <p> <span className='text-green-400'>AX:</span> {reg.ax}</p>
+            <p> <span className='text-green-400'>BX:</span> {reg.bx}</p>
+            <p> <span className='text-green-400'>CX:</span> {reg.cx}</p>
+            <p> <span className='text-green-400'>DX:</span> {reg.dx}</p>
+            {` `}
+          </div>),
+          isError: false,
         };
       default:
         return {
-          message: "Invalid variable name",
+          message: "dump command requires 'stack' or 'r' argument",
           isError: true
         };  
     }
   }
   
-  public mov(dest: string, source: string): DumpType {
-    if (!dest && !source) {
-      return {
-        message: "Move command requires destination and source",
-        isError: true
-      }
-      
+  public mov(dest: string, source: string): ReturnType {
+    
+    const isNumber = !isNaN(parseInt(source))
+    
+    //mov AX 1
+    if (isNumber) {
+      this.registers[dest.toLowerCase()] = parseInt(source);
     }
-    if (dest.toLowerCase() === "ax" || dest === "bx" || dest === "cx" || dest === "dx") {
-      if (isNaN(parseInt(source))) {
-        return {
-          message: "Invalid source value",
-          isError: true
-        }
-      }
-      else {
-        this.registers[dest.toLowerCase()] = parseInt(source);
-        return {
-          message: "Move successful",
-          isError: false
-        }
-      }
-      
+    
+    //mov AX BX
+    if (!isNumber) {
+      this.registers[dest.toLowerCase()] = this.registers[source.toLowerCase()];
     }
+    
     return {
-      message: "Invalid destination register",
-      isError: true
+      message: `MOV ${dest}, ${source}`,
+      isError: false
     }
   }
   

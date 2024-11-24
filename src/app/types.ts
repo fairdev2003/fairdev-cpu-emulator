@@ -2,15 +2,17 @@ const Registries = [
     "AX", "BX", "CX", "DX"
 ]
 
-export type DumpType = {
+export const RegistersData = {
+  AX: 0,
+  BX: 0,
+  CX: 0,
+  DX: 0,
+}
+
+export type ReturnType = {
   message: string
   isError: boolean
+  registriesData?: typeof RegistersData 
 }
 
 export type RegistriesType = typeof Registries[number]
-
-export const RegisterInstructions = {
-    "ADD": (destination: RegistriesType, source: RegistriesType) => `ADD ${destination}, ${source}`,
-    "SUB": (destination: RegistriesType, source: RegistriesType) => `SUB ${destination}, ${source}`,
-    "MUL": (destination: RegistriesType, source: RegistriesType) => `MUL ${destination}, ${source}`,
-}

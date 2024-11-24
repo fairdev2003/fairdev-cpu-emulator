@@ -6,8 +6,8 @@ import {
   UnknownCommand,
 } from "./terminal";
 import { Dispatch, SetStateAction } from "react";
-import {CPU} from "@/app/emulator";
-import { DumpType } from "@/app/types";
+import { CPU } from "@/app/emulator";
+import { ReturnType } from "@/app/types";
 
 const cpu = new CPU()
 
@@ -47,17 +47,18 @@ export class Command {
           <HelpCommand key="help-command"/>,
         ]);
         return;
-      case "load":
+      case "load": {
+        return;
+      }
       case "dump": {
         
         const input = commandContent.split(" ");
-        const dumpContent: DumpType = cpu.dump(input);
+        const dumpContent = cpu.dump(input);
         setState([
           ...state,
           <CommandProvider key='command-provider' commandLineContent={commandContent}>
             <div key='memory-dump'>
-              {!dumpContent.isError && <p>Dump Content:</p>}
-              <p className={dumpContent.isError ? "text-red-500" : ""}>{dumpContent.message}</p>
+              {!dumpContent.isError ? <div>{dumpContent.message}</div> : <ErrorCommand content={dumpContent.message as string}/>}
             </div> 
           </CommandProvider>
           ]
