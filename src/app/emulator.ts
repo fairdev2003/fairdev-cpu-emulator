@@ -43,21 +43,34 @@ class CPU {
     }
   }
   
-  public mov(dest: string, source: string): string {
+  public mov(dest: string, source: string): DumpType {
     if (!dest && !source) {
-      return "Invalid move command";
+      return {
+        message: "Move command requires destination and source",
+        isError: true
+      }
+      
     }
     if (dest.toLowerCase() === "ax" || dest === "bx" || dest === "cx" || dest === "dx") {
       if (isNaN(parseInt(source))) {
-        return "Invalid source value";
+        return {
+          message: "Invalid source value",
+          isError: true
+        }
       }
       else {
         this.registers[dest.toLowerCase()] = parseInt(source);
-        return "Move successful";
+        return {
+          message: "Move successful",
+          isError: false
+        }
       }
-      return "Move successful";
+      
     }
-    return "Invalid destination register";
+    return {
+      message: "Invalid destination register",
+      isError: true
+    }
   }
   
   public xchg(dest: string, source: string): void {

@@ -7,7 +7,7 @@ import {
 } from "./terminal";
 import { Dispatch, SetStateAction } from "react";
 import {CPU} from "@/app/emulator";
-import {DumpType} from "@/app/types";
+import { DumpType } from "@/app/types";
 
 const cpu = new CPU()
 
@@ -21,13 +21,6 @@ export class Command {
     const command = commandContent.toLowerCase().split(" ")[0];
     switch (command) {
       
-      case "help":
-        setState([
-          ...state,
-          <ConsoleLine key="console-line" content={commandContent} />,
-          <HelpCommand key="help-command"/>,
-        ]);
-        return;
       case "kurwa":
         setState([
           ...state,
@@ -45,6 +38,13 @@ export class Command {
           <CommandProvider key='command-provider' commandLineContent={commandContent}>
             <p className='text-green-500'>Memory reset successfully</p>
           </CommandProvider>
+        ]);
+        return;
+      case "help":
+        setState([
+          ...state,
+          <ConsoleLine key="console-line" content={commandContent} />,
+          <HelpCommand key="help-command"/>,
         ]);
         return;
       case "load":
@@ -67,10 +67,12 @@ export class Command {
       case "mov": {
         const [_, destination, source ] = commandContent.split(" ");
         
+        const movOutput = cpu.mov(destination, source)
+        
         setState([
           ...state,
           <CommandProvider key='command-provider' commandLineContent={commandContent}>
-            <p className='text-blue-500'>{cpu.mov(destination, source)}</p>
+            {!movOutput.isError ? <p className='text-blue-500'>{movOutput.message}</p> : <ErrorCommand key='error-command' content={movOutput.message}/>} 
           </CommandProvider>
         ])
         return;
