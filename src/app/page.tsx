@@ -49,9 +49,9 @@ export default function Home() {
               // clear the user input after "Enter" have been clicked
               setCommandContent("");
 
-              // scroll into down side of the (terminal)
+              // scroll into downside of the (terminal)
               setTimeout(() => {
-                terminalWindow.current?.scrollIntoView({behavior: "smooth" });
+                terminalWindow.current?.scrollIntoView({ behavior: "smooth", block: "end" });
               }, 100);
               
             }
