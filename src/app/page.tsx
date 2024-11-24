@@ -1,41 +1,28 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Console, CPU } from "./emulator";
-import { ConsoleLine, HelpCommand, SiemaCommand } from "./terminal/terminal";
+import { Command } from "@/app/(terminal)/commands";
 
 export default function Home() {
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [consoleElements, setConsoleElements] = useState<any>([
-    <p>Type "help" to view available commands</p>,
+    <p key={"p"}>Type {'"help"'} to view available commands</p>,
   ]);
   const [commandContent, setCommandContent] = useState("");
-  const cpu = new CPU();
-  const terminal = new Console();
+  const terminalWindow = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const divRef = useRef<HTMLDivElement>(null);
+  const command = new Command();
 
   useEffect(() => {
     inputRef?.current?.focus();
   }, []);
-
-  const helpOutput = `Available commands:
   
-help - Display this help message
-cls - Clear the console
-load <file> - Load a file into memory
-run <file> - Run the loaded file
-               `;
-  const siemaCommand = `------------------------------------------------------
-Siema byku! :D
-------------------------------------------------------`;
-
   return (
     <div
-      ref={divRef}
+      ref={terminalWindow}
       className="flex flex-col whitespace-pre-wrap text-white p-2"
     >
-      {consoleElements.map((element, index) => (
+      {consoleElements.map((element: any, index: any) => (
         <div key={index} className="text-gray-400">
           {element}
         </div>
@@ -54,66 +41,19 @@ Siema byku! :D
             setCommandContent(e.currentTarget.value);
           }}
           onKeyDown={(e) => {
-            if (e.key === "ArrowUp") {
-              const index = commandHistory.indexOf(commandContent);
-              if (index > 0) {
-                setCommandContent(commandHistory[index - 1]);
-                e.currentTarget.value = commandContent;
-              }
-            }
-            if (e.key === "Enter") {
-              if (commandContent.startsWith("help")) {
-                setConsoleElements([
-                  ...consoleElements,
-                  <ConsoleLine content={commandContent} />,
-                  <HelpCommand />,
-                ]);
-                console.log(consoleElements);
-              }
-              if (commandContent.startsWith("cls")) {
-                console.log("Enter");
-                setConsoleElements([]);
-              }
-              if (commandContent.startsWith("siema")) {
-                setConsoleElements([
-                  ...consoleElements,
-                  <ConsoleLine content={commandContent} />,
-                  <SiemaCommand />,
-                ]);
-              }
-              if (commandContent.startsWith("mov")) {
-                const args = commandContent.split(" ");
-                const [command, firstArg, secondArg] = args;
+            if (e.key === "Enter" && commandContent.length > 0) {
 
+              // execute the command base on user input
+              command.execute(commandContent, setConsoleElements, consoleElements)
 
-                var message = <div></div>;
-                if (args.length > 1) {
-                  message = (
-                    <div>
-                      <p><span className="text-blue-500">Command:</span> {command.toUpperCase()}</p>
-                      <p><span className="text-blue-500">First Argument:</span> {firstArg}</p>
-                      <p><span className="text-blue-500">Second Argument:</span> {secondArg}</p>
-                    </div>
-                  );
-                } else {
-                  message = (
-                    <div>
-                      <p>---------------------------------------</p>
-                      <p className="text-red-500"><span className="text-white">{"["}</span>⚠︎<span className="text-white">{"]"}</span> Missing args: {"<arg1>"} and {"<arg2>"}</p>
-                      <p>---------------------------------------</p>
-                    </div>
-                  );
-                }
-
-                setConsoleElements([
-                  ...consoleElements,
-                  <ConsoleLine content={commandContent} />,
-                  message,
-                ]);
-              }
+              // clear the user input after "Enter" have been clicked
               setCommandContent("");
-              setCommandHistory([...commandHistory, commandContent]);
-              divRef.current?.scrollTo(0, 10);
+
+              // scroll into down side of the (terminal)
+              setTimeout(() => {
+                terminalWindow.current?.scrollIntoView({behavior: "smooth" });
+              }, 100);
+              
             }
           }}
           spellCheck={false}
@@ -125,4 +65,5 @@ Siema byku! :D
       </div>
     </div>
   );
+
 }

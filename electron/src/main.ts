@@ -1,17 +1,26 @@
 import { is } from "@electron-toolkit/utils";
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, Notification } from "electron";
 import { getPort } from "get-port-please";
 import { startServer } from "next/dist/server/lib/start-server";
 import { join } from "path";
 
+const NOTIFICATION_TITLE = "Siema";
+const NOTIFICATION_BODY = "Siema jestes zalogowany do systemu!";
+
+function showNotification() {
+  new Notification({
+    title: NOTIFICATION_TITLE,
+    body: NOTIFICATION_BODY,
+  }).show();;
+}
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
-    icon: join(__dirname, "icon.png"),   
+    icon: join(__dirname, "icon.png"),
     autoHideMenuBar: true,
     minWidth: 900,
     minHeight: 500,
     maxHeight: 500,
-    maxWidth: 800,
+    maxWidth: 900,
     webPreferences: {
       preload: join(__dirname, "preload.js"),
       nodeIntegration: true,
@@ -46,7 +55,7 @@ const startNextJSServer = async () => {
 
     await startServer({
       dir: webDir,
-      isDev: false,
+      isDev: true,
       hostname: "localhost",
       port: nextJSPort,
       customServer: true,
@@ -65,6 +74,7 @@ const startNextJSServer = async () => {
 app.whenReady().then(() => {
   createWindow();
 
+  ipcMain.on("show-notification", () => showNotification());
   ipcMain.on("ping", () => console.log("pong"));
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

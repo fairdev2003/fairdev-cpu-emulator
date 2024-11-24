@@ -1,5 +1,5 @@
 {
-  "name": "nextjs_approuter_electron",
+  "name": "cpu_emulator",
   "version": "0.0.1",
   "private": true,
   "homepage": "https://saybackend.com",
@@ -20,12 +20,17 @@
     "electron:dist": "electron-builder --dir",
     "electron:dist:deb": "electron-builder --linux deb",
     "electron:build": "tsup",
+    "publish": "electron-forge publish",
     "build": "run-s next:build electron:build",
     "dist": "run-s build electron:dist",
     "dev": "npm-run-all --parallel electron:dev next:dev",
     "electron:build_watch": "tsup --watch",
     "electron:dev": "npm-run-all --parallel electron:build_watch electron:watch",
-    "electron:watch": "cross-env NODE_ENV='development' nodemon"
+    "electron:watch": "cross-env NODE_ENV='development' nodemon",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "install": "pnpm i zustand"
   },
   "dependencies": {
     "@electron-toolkit/utils": "^3.0.0",
@@ -35,14 +40,16 @@
     "next": "14.2.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "sharp": "^0.33.4"
+    "sharp": "^0.33.4",
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^7.5.0",
+    "@electron-forge/publisher-github": "^7.5.0",
     "@types/node": "^22.1.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "electron": "^31.3.1",
-    "electron-builder": "^24.13.3",
     "eslint": "^8.5.7",
     "eslint-config-next": "14.2.5",
     "nodemon": "^3.1.4",
@@ -52,9 +59,12 @@
     "tsup": "^8.2.4",
     "typescript": "^5.5.4"
   },
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "build": {
     "asar": true,
-    "executableName": "NextJSElectron",
+    "executableName": "emulator",
     "appId": "com.saybackend.nextjs-electron",
     "asarUnpack": [
       "node_modules/next",
@@ -83,7 +93,7 @@
     ],
     "win": {
       "target": [
-        "nsis"
+        "portable"
       ]
     },
     "linux": {

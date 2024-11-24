@@ -2,6 +2,11 @@ const Registries = [
     "AX", "BX", "CX", "DX"
 ]
 
+export type DumpType = {
+  message: string
+  isError: boolean
+}
+
 export type RegistriesType = typeof Registries[number]
 
 export const RegisterInstructions = {

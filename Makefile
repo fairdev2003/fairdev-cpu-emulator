@@ -26,7 +26,7 @@ postinstall:
 	pnpm electron-builder install-app-deps
 
 electron_dist:
-	pnpm electron-builder --dir
+	pnpm electron-builder --win
 
 electron_dist_deb:
 	pnpm electron-builder --linux deb
