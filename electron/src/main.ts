@@ -27,6 +27,7 @@ const createWindow = () => {
     },
     title: "Electron Next.js Boilerplate",
   });
+  
 
   mainWindow.on("ready-to-show", () => mainWindow.show());
 
@@ -73,7 +74,10 @@ const startNextJSServer = async () => {
 
 app.whenReady().then(() => {
   createWindow();
-
+  
+  ipcMain.on("open-link", () => {
+    
+  })
   ipcMain.on("show-notification", () => showNotification());
   ipcMain.on("ping", () => console.log("pong"));
   app.on("activate", () => {

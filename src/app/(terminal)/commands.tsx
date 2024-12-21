@@ -8,6 +8,8 @@ import {
 import { Dispatch, SetStateAction } from "react";
 import { CPU } from "@/app/emulator";
 import { ReturnType } from "@/app/types";
+import Image from "next/image";
+import Link from "next/link";
 
 const cpu = new CPU()
 
@@ -91,6 +93,45 @@ export class Command {
           ])
           
         }
+        return;
+      }
+      case "about": {
+        const art = `
+              #%:.                
+       #%=   ###%=:    
+      ##%=   |##%::    
+      ##%=   ###%=:    
+       #%%=  |##%=:    
+       ##%== ###%=:    ===
+        ##%%=!##%=:    ====
+         ###%%##%=   :==== 
+          ######%=: .:==== 
+            ####%%======= 
+             ###%%%===: 
+             |%#%%=:=:  
+             ####%=:   
+             |##%%:    
+      -------####%:--------=
+             |%#%%:            
+        `
+        setState([
+          ...state,
+          <ConsoleLine key="console-line" content={commandContent}/>,
+          <div className='text-green-500 flex' key="about-container">
+            <p key="art">{art}</p>
+            <div className='text-blue-500'>
+              {` `}
+
+              <p>klimson<span className='text-white'>@</span>klimson-CPUEmulator</p>
+              <p>Author: <span className='text-white'>fairdev2003</span></p>
+              <p>Techstack: <span className='text-white'>Electron, Next.js, Tailwind.css</span></p>
+              <p>Repo: <span className='text-white'><Link target="_blank" rel="noreferrer" href={"https://github.com/fairdev2003/fairdev-cpu-emulator"} className="hover:underline hover:text-blue-500">fairdev-cpu-emulator</Link></span></p>
+
+
+            </div>
+          </div>
+
+        ]);
         return;
       }
       default:

@@ -15,4 +15,9 @@ export type ReturnType = {
   registriesData?: typeof RegistersData 
 }
 
+export type historyType = {
+  commands: string[],
+  step: number,
+}
+
 export type RegistriesType = typeof Registries[number]

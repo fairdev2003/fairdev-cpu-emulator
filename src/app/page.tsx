@@ -2,9 +2,16 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Command } from "@/app/(terminal)/commands";
+import {historyType} from "@/app/types";
+import {step} from "next/dist/experimental/testmode/playwright/step";
+
+
 
 export default function Home() {
-  const [commandHistory, setCommandHistory] = useState<string[]>([]);
+  const [commandHistory, setCommandHistory] = useState<historyType>({
+    commands: [],
+    step: 0
+  });
   const [consoleElements, setConsoleElements] = useState<any>([
     <p key={"p"}>Type {'"help"'} to view available commands</p>,
   ]);
@@ -14,7 +21,9 @@ export default function Home() {
   const command = new Command();
 
   useEffect(() => {
-    inputRef?.current?.focus();
+    window.addEventListener("keydown", function () {
+      inputRef?.current?.focus();
+    })
   }, []);
   
   return (
@@ -30,7 +39,7 @@ export default function Home() {
 
       <div className="flex">
         <p className="">
-          <span className="text-green-400">klimson@klimson-CPUEmulator</span>:
+          <span className="text-green-400 font-bold">klimson@klimson-CPUEmulator</span>:
           <span className="text-blue-400">~</span>$ {}
         </p>
         <input
@@ -41,10 +50,33 @@ export default function Home() {
             setCommandContent(e.currentTarget.value);
           }}
           onKeyDown={(e) => {
+            if (e.key === "ArrowUp") {
+              setCommandHistory({
+                step: commandHistory.step > 0 ? commandHistory.step - 1 : commandHistory.commands.length - 1,
+                commands: [...commandHistory.commands],
+              })
+              setCommandContent(commandHistory.commands[commandHistory.step - 1])
+              inputRef.current?.focus();
+            }
+            if (e.key === "ArrowDown") {
+              setCommandHistory({
+                step: commandHistory.step == commandHistory.commands.length - 1 ? 0 : commandHistory.step + 1,
+                commands: [...commandHistory.commands],
+              })
+              setCommandContent(commandHistory.commands[commandHistory.step - 1])
+              inputRef.current?.focus();
+            }
+            
             if (e.key === "Enter" && commandContent.length > 0) {
 
               // execute the command base on user input
-              command.execute(commandContent, setConsoleElements, consoleElements)
+              command.execute(commandContent, setConsoleElements, consoleElements);
+              
+              setCommandHistory({
+                commands: [...commandHistory.commands, commandContent],
+                step: commandHistory.step + 1,
+              })
+                
 
               // clear the user input after "Enter" have been clicked
               setCommandContent("");
@@ -57,13 +89,10 @@ export default function Home() {
             }
           }}
           spellCheck={false}
-          onBlur={(e) => {
-            e.currentTarget.focus();
-          }}
-          autoFocus
+          
+          
         ></input>
       </div>
     </div>
   );
-
 }

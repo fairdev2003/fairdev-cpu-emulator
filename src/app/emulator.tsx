@@ -12,8 +12,11 @@ class CPU {
     // additional registers
     flags: 0,
     ip: 0,
+    
+    
     memory: new Array(65536).fill(0), // 64 KB of memory
   };
+  
   public stack: number[] = [1, 2];
   
   public dump(args: string[])  {
@@ -59,6 +62,7 @@ class CPU {
   }
   
   public mov(dest: string, source: string): ReturnType {
+    
     
     const isNumber = !isNaN(parseInt(source))
     

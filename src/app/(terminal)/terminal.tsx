@@ -8,7 +8,7 @@ type ConsoleLineProps = {
 export const ConsoleLine = ({ content }: { content: string }) => {
   return (
     <p className="">
-      <span className="text-green-400">klimson@klimson-CPUEmulator</span>:
+      <span className="text-green-400 font-bold">klimson@klimson-CPUEmulator</span>:
       <span className="text-blue-400">~</span>$ {content}
     </p>
   );
