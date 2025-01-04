@@ -21,7 +21,7 @@
     "electron:dist:deb": "electron-builder --linux deb",
     "electron:build": "tsup",
     "publish": "electron-forge publish",
-    "build": "run-s next:build electron:build",
+    "build": "next build && electron-build`er",
     "dist": "run-s build electron:dist",
     "dev": "npm-run-all --parallel electron:dev next:dev",
     "electron:build_watch": "tsup --watch",
@@ -29,12 +29,11 @@
     "electron:watch": "cross-env NODE_ENV='development' nodemon",
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make",
-    "install": "pnpm i zustand"
+    "make": "electron-forge make"
   },
   "dependencies": {
     "@electron-toolkit/utils": "^3.0.0",
-    "@next/env": "^14.2.5",
+    "@next/env": "^14.2.5", 
     "cross-env": "^7.0.3",
     "get-port-please": "^3.1.2",
     "next": "14.2.5",
@@ -50,6 +49,7 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "electron": "^31.3.1",
+    "electron-builder": "^25.1.8",
     "eslint": "^8.5.7",
     "eslint-config-next": "14.2.5",
     "nodemon": "^3.1.4",
@@ -62,45 +62,22 @@
   "engines": {
     "node": ">=16.0.0"
   },
+
   "build": {
-    "asar": true,
-    "executableName": "emulator",
-    "appId": "com.saybackend.nextjs-electron",
-    "asarUnpack": [
-      "node_modules/next",
-      "node_modules/@img",
-      "node_modules/sharp",
-      "**\\*.{node,dll}"
-    ],
-    "files": [
-      "build",
-      {
-        "from": ".next/standalone",
-        "to": "app",
-        "filter": [
-          "!**/.env",
-          "!**/package.json"
-        ]
-      },
-      {
-        "from": ".next/static",
-        "to": "app/.next/static"
-      },
-      {
-        "from": "public",
-        "to": "app/public"
-      }
-    ],
+    "appId": "com.cpu.emulator",
+    "productName": "CPU Emulator",
     "win": {
       "target": [
         "portable"
-      ]
-    },
-    "linux": {
-      "target": [
-        "deb"
       ],
-      "category": "Development"
-    }
+      "icon": "icon.ico"
+    },
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "build/**/*",
+      "package.json"
+    ]
   }
 }

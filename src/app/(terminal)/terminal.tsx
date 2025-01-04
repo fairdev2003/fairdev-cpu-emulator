@@ -44,44 +44,59 @@ export const HelpCommand = () => {
       <h1>{` `}</h1>
       <p className="text-blue-400">Available commands:</p>
       <p>{` `}</p>
-      <h1>Basic commmands</h1>
+
+      <h1>Basic commands</h1>
       <p>
         <span className="font-bold">{"    "}help</span> {"       "}Display this help message
       </p>
       <p>
         <span className="font-bold">{"    "}cls</span> {"       "}Clear the console
       </p>
-
       <p>
-        <span className="font-bold">{"    "}cls</span> {"       "}Clear the console
+        <span className="font-bold">{"    "}about</span> {"       "}Display information about the project
       </p>
-
 
       <p>{` `}</p>
-      <h1>CPU Emulator commmands</h1>
+      <h1>CPU Emulator commands</h1>
       <p>
-        <span className="font-bold">{"    "}mov {"<dest> <src>"}</span> {"       "}mov assembly instruction
+        <span className="font-bold">{"    "}mov {"<dest> <src>"}</span> {"       "}Move value
+        from src to det (register/memory)
       </p>
       <p>
-        <span className="font-bold">{"    "}xchg</span> {"       "}xhgr assembly
-        instruction
+        <span className="font-bold">{"    "}xchg {"<reg1> <reg2>"}</span> {"       "}Exchange values
+        between reg1 and reg2 (registers or register and memory)
       </p>
       <p>
-        <span className="font-bold">{"    "}reset</span> {"       "}clear the memory
+        <span className="font-bold">{"    "}reset</span> {"       "}Clear the memory of the CPU
       </p>
       <p>
-        <span className="font-bold">{"    "}dump</span> {"       "}print the memory
+        <span className="font-bold">{"    "}dump {"<stack/r>"}</span> {"       "}Dump the stack or registers content
       </p>
-      {` `}
+      <p>
+        <span className="font-bold">{"    "}push {"<register>"}</span> {"       "}Push value of register to the stack
+        (AX, BX, CX, DX)
+      </p>
+      <p>
+        <span className="font-bold">{"    "}pop {"<register>"}</span> {"       "}Pop value from the stack
+        into register (AX, BX, CX, DX)
+      </p>
     </div>
-  );
+);
 };
 
-export const UnknownCommand = ({content}: { content: string }) => {
+export const UnknownCommand = ({
+  content
+}: {
+  content: string
+}) => {
   return <div>Unknown Command: {content.toLowerCase().split(" ")[0]}</div>;
 };
 
-export const ErrorCommand = ({ content }: { content: string }) => {
+export const ErrorCommand = ({
+  content
+}: {
+  content: string
+}) => {
   return <div>
     <p className='text-red-500'>
       ⛔ {content}
@@ -89,7 +104,11 @@ export const ErrorCommand = ({ content }: { content: string }) => {
   </div>;
 };
 
-export const OutputMov = ({ content }: { content: typeof RegistersData}) => {
+export const OutputMov = ({
+  content
+}: {
+  content: typeof RegistersData
+}) => {
   return (
     <div className=''>
       {content.AX}
@@ -97,6 +116,44 @@ export const OutputMov = ({ content }: { content: typeof RegistersData}) => {
   )
 }
 
-export const Space = () => {
+export const TerminalSpace = () => {
   return <div>{` `}</div>;
+}
+
+export const ColormaticTerminal = () => {
+  return (
+    <div className='mt-5'>
+      <div className="flex">
+        <div className='bg-black w-[50px] h-[30px]'/>
+        <div className='bg-red-600 w-[50px] h-[30px]'/>
+        <div className='bg-green-600 w-[50px] h-[30px]'/>
+        <div className='bg-yellow-600 w-[50px] h-[30px]'/>
+        <div className='bg-green-600 w-[50px] h-[30px]'/>
+        <div className='bg-purple-600 w-[50px] h-[30px]'/>
+        <div className='bg-cyan-600 w-[50px] h-[30px]'/>
+        <div className='bg-gray-300 w-[50px] h-[30px]'/>
+      </div>
+      <div className="flex">
+        <div className='bg-gray-300 w-[50px] h-[30px]'/>
+        <div className='bg-red-400 w-[50px] h-[30px]'/>
+        <div className='bg-green-400 w-[50px] h-[30px]'/>
+        <div className='bg-yellow-400 w-[50px] h-[30px]'/>
+        <div className='bg-blue-400 w-[50px] h-[30px]'/>
+        <div className='bg-purple-400 w-[50px] h-[30px]'/>
+        <div className='bg-cyan-400 w-[50px] h-[30px]'/>
+        <div className='bg-white w-[50px] h-[30px]'/>
+      </div>
+      
+
+    </div>
+  )
+}
+
+export const TerminalTextInfo = ({text, children} : {
+  text: string
+  children: ReactNode
+}) => {
+  return (
+    <p className='text-blue-500 flex'>{text}: <span className='text-white'>{children}</span></p>
+  )
 }

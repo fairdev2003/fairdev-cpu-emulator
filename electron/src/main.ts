@@ -3,16 +3,8 @@ import { app, BrowserWindow, ipcMain, Notification } from "electron";
 import { getPort } from "get-port-please";
 import { startServer } from "next/dist/server/lib/start-server";
 import { join } from "path";
+import IpcMainEvent = Electron.IpcMainEvent;
 
-const NOTIFICATION_TITLE = "Siema";
-const NOTIFICATION_BODY = "Siema jestes zalogowany do systemu!";
-
-function showNotification() {
-  new Notification({
-    title: NOTIFICATION_TITLE,
-    body: NOTIFICATION_BODY,
-  }).show();;
-}
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
     icon: join(__dirname, "icon.png"),
@@ -25,7 +17,7 @@ const createWindow = () => {
       preload: join(__dirname, "preload.js"),
       nodeIntegration: true,
     },
-    title: "Electron Next.js Boilerplate",
+    title: "CPU Emulatorr",
   });
   
 
@@ -78,12 +70,13 @@ app.whenReady().then(() => {
   ipcMain.on("open-link", () => {
     
   })
-  ipcMain.on("show-notification", () => showNotification());
   ipcMain.on("ping", () => console.log("pong"));
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
+
+
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();

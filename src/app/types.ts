@@ -21,3 +21,12 @@ export type historyType = {
 }
 
 export type RegistriesType = typeof Registries[number]
+
+export type CPUTypes<T> = {
+  ax: T
+  bx: T
+  cx: T
+  dx: T 
+  stack: T[]
+  memory: Array<T>
+}
